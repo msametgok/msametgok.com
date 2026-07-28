@@ -1,0 +1,160 @@
+.work {
+  padding-block: var(--section-y);
+}
+
+.shell {
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.heading {
+  font-size: var(--step-3);
+}
+
+.list {
+  margin-top: clamp(2rem, 5vw, 3rem);
+  border-top: 1px solid var(--rule);
+}
+
+.project {
+  display: grid;
+  grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+  gap: 1rem clamp(1.5rem, 5vw, 3.5rem);
+  padding-block: clamp(1.75rem, 4vw, 2.75rem);
+  border-bottom: 1px solid var(--rule);
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.year {
+  font-family: var(--mono);
+  font-size: var(--step--1);
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.links {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.3rem;
+  font-family: var(--mono);
+  font-size: var(--step--1);
+}
+
+.name {
+  font-size: var(--step-2);
+}
+
+.summary {
+  max-width: 54ch;
+  margin-top: 0.65rem;
+  color: var(--ink-muted);
+}
+
+.spec {
+  margin-top: 1.4rem;
+  display: grid;
+  gap: 0.5rem;
+  border-top: 1px solid var(--rule);
+  padding-top: 1rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.row dt {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.row dd {
+  margin: 0;
+  font-size: var(--step--1);
+}
+
+/*
+ * Decisions.
+ *
+ * Deliberately not a panel. The panel shape is for things with a live readout;
+ * these are static prose, and boxing them would borrow emphasis they do not
+ * need. This stays quiet and typographic, which is what the rest of the page
+ * does when the trace is not talking.
+ *
+ * The rules are neutral on purpose. A span hue here would imply a layer, and
+ * these notes are not one layer each — colour stays semantic by staying out.
+ */
+
+.notes {
+  margin-top: 1.6rem;
+  border-top: 1px solid var(--rule);
+  padding-top: 1.15rem;
+}
+
+.notesHeading {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* auto-fit collapses this to one column well before 375px, with no query. */
+.noteList {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+  display: grid;
+  gap: 1.15rem clamp(1.5rem, 4vw, 2.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+
+.note {
+  border-left: 2px solid var(--rule);
+  padding-left: 0.9rem;
+}
+
+.noteTitle {
+  font-size: var(--step-0);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.noteBody {
+  margin-top: 0.4rem;
+  font-size: var(--step--1);
+  line-height: 1.55;
+  color: var(--ink-muted);
+  max-width: 46ch;
+}
+
+@media (max-width: 44rem) {
+  .project {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .meta {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .links {
+    grid-auto-flow: column;
+    gap: 1rem;
+  }
+}
