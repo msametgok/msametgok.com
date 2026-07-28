@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!--
+    The hero trace at 16px: four spans cascading right, in the four layer
+    colours. Transparent ground so it reads on light and dark browser chrome.
+    Square corners, because nothing in this design has a radius.
+  -->
+  <title>Trace waterfall</title>
+  <rect x="3" y="5" width="11" height="4" fill="#2f5fe0"/>
+  <rect x="7" y="12" width="13" height="4" fill="#0f9b8e"/>
+  <rect x="12" y="19" width="11" height="4" fill="#7c4ddb"/>
+  <rect x="17" y="26" width="12" height="4" fill="#d0691f"/>
+</svg>

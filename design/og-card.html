@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Social card artboard</title>
+    <!--
+      Source for public/og.png — the image shown when the site is shared.
+
+      This is an artboard, not a page. It is not part of the build (it lives
+      outside public/, so Vite never copies it to dist/). To re-export after an
+      edit: run the dev server, open /design/og-card.html, and screenshot the
+      viewport at roughly 1.9:1 into public/og.png.
+
+      It deliberately reuses the site's tokens and the real trace data, so the
+      share card and the page cannot drift apart in style.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #eef1f4;
+        --surface: #ffffff;
+        --surface-sunk: #e4e9ee;
+        --rule: #ced7e0;
+        --ink: #101826;
+        --ink-muted: #48596e;
+        --edge: #2f5fe0;
+        --service: #0f9b8e;
+        --data: #7c4ddb;
+        --async: #d0691f;
+        --mono: 'IBM Plex Mono', monospace;
+        --display: 'Archivo', sans-serif;
+        --body: 'IBM Plex Sans', sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      body {
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--body);
+        height: 100vh;
+        display: grid;
+        place-items: center;
+      }
+
+      /*
+       * The card is a true 1.91:1 box on a background of the same colour, so a
+       * centre crop — which is what every platform does — lands exactly on it,
+       * whatever aspect the capture happens to be. Nothing important may sit
+       * outside this box.
+       */
+      .card {
+        width: 100%;
+        aspect-ratio: 1200 / 630;
+        max-height: 100vh;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        padding: 3vw 5vw;
+        gap: 2vw;
+      }
+
+      .bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        font-family: var(--mono);
+        font-size: 1.35vw;
+        letter-spacing: 0.02em;
+        color: var(--ink-muted);
+        border-bottom: 0.12vw solid var(--rule);
+        padding-bottom: 1.2vw;
+      }
+
+      .bar strong {
+        color: var(--ink);
+        font-weight: 600;
+      }
+
+      .middle {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4vw;
+        align-items: center;
+      }
+
+      h1 {
+        font-family: var(--display);
+        font-weight: 800;
+        font-size: 4.4vw;
+        line-height: 1.02;
+        letter-spacing: -0.03em;
+      }
+
+      .role {
+        margin-top: 1.6vw;
+        font-size: 1.7vw;
+        color: var(--ink-muted);
+        max-width: 22ch;
+      }
+
+      /* The trace, drawn from the same spans the site uses. */
+      .trace {
+        background: var(--surface);
+        border: 0.1vw solid var(--rule);
+        padding: 1.8vw;
+        display: grid;
+        gap: 0.9vw;
+      }
+
+      .span {
+        display: grid;
+        grid-template-columns: 1fr 4.5vw;
+        align-items: center;
+        gap: 1vw;
+      }
+
+      .track {
+        position: relative;
+        height: 1.05vw;
+        background: var(--surface-sunk);
+      }
+
+      .fill {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        background: var(--hue);
+      }
+
+      .ms {
+        font-family: var(--mono);
+        font-size: 1.15vw;
+        color: var(--ink-muted);
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .foot {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        font-family: var(--mono);
+        font-size: 1.35vw;
+        letter-spacing: 0.02em;
+        color: var(--ink-muted);
+        border-top: 0.12vw solid var(--rule);
+        padding-top: 1.2vw;
+      }
+
+      .foot strong {
+        color: var(--ink);
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+    <div class="bar">
+      <span><strong>GET /api/orders</strong></span>
+      <span>78 ms</span>
+    </div>
+
+    <div class="middle">
+      <div>
+        <h1>Mehmet Gok</h1>
+        <p class="role">
+          Backend developer. I design and run the services behind the product.
+        </p>
+      </div>
+
+      <div class="trace">
+        <div class="span">
+          <span class="track"><span class="fill" style="--hue: var(--edge); left: 0%; width: 9%"></span></span>
+          <span class="ms">7 ms</span>
+        </div>
+        <div class="span">
+          <span class="track"><span class="fill" style="--hue: var(--service); left: 6%; width: 14%"></span></span>
+          <span class="ms">11 ms</span>
+        </div>
+        <div class="span">
+          <span class="track"><span class="fill" style="--hue: var(--data); left: 21%; width: 5%"></span></span>
+          <span class="ms">4 ms</span>
+        </div>
+        <div class="span">
+          <span class="track"><span class="fill" style="--hue: var(--service); left: 26%; width: 56%"></span></span>
+          <span class="ms">44 ms</span>
+        </div>
+        <div class="span">
+          <span class="track"><span class="fill" style="--hue: var(--data); left: 31%; width: 42%"></span></span>
+          <span class="ms">33 ms</span>
+        </div>
+        <div class="span">
+          <span class="track"><span class="fill" style="--hue: var(--async); left: 74%; width: 12%"></span></span>
+          <span class="ms">9 ms</span>
+        </div>
+        <div class="span">
+          <span class="track"><span class="fill" style="--hue: var(--edge); left: 86%; width: 14%"></span></span>
+          <span class="ms">11 ms</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <span><strong>msametgok.com</strong></span>
+      <span>Open to backend roles</span>
+    </div>
+    </div>
+  </body>
+</html>
