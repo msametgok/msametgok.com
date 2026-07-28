@@ -18,24 +18,28 @@ export const site = {
     'Comfortable enough on the frontend to ship a feature end to end.',
 
   /*
-   * TODO: rewrite the first paragraph in your own voice. Two or three sentences,
-   * specific over clever.
+   * Three short paragraphs: a stance, the stack that follows from it, and the
+   * reach past the backend. Stated opinions do the work a biography would —
+   * they say what you are like to work with, which a stack list cannot.
    *
-   * The second names technologies deliberately sparingly. The four layers in
-   * `layers` below are already the skills list, reached through the trace, and
-   * a section that restates them is the duplication that got the old skills
-   * grid deleted. This paragraph is here to say what the stack was used to
-   * build, which the layer list cannot.
+   * TODO: read this aloud once and make the voice yours. The opinions have to
+   * be ones you would defend in an interview, or they read as borrowed.
+   *
+   * Technologies stay in the middle paragraph only. The four layers reached
+   * through the trace are already the skills list; the moment this becomes a
+   * bare roll of technologies it is the skills grid that was deleted for
+   * restating the diagram, just set in paragraph form.
    */
   about: [
-    'I work closest to the parts of a product people never see: request paths, ' +
-      'schema design, queues, and the failure modes that only show up at 3am. ' +
-      'The frontend knowledge is there so a handoff never becomes a bottleneck.',
-    'Day to day that means Node and Express over MongoDB, with Redis holding the ' +
-      'state that has to be fast or shared across processes. I have built realtime ' +
-      'messaging where presence, typing, and read receipts stay correct across ' +
-      'reconnects and multiple tabs, with message bodies encrypted at rest. I test ' +
-      'what I ship — Jest on the server, Vitest and Testing Library on the client.',
+    'I build the parts of a product people never see, and I have opinions about ' +
+      'how. I would rather ship a schema I can explain than a clever one I can’t. ' +
+      'I would rather find a bug in a test than in someone’s inbox.',
+    'That shows up in the work: Node and Express over Postgres or MongoDB, Redis ' +
+      'where state has to be fast or shared, all of it in Docker through CI — ' +
+      'tested on both sides, and instrumented so a production problem is visible ' +
+      'instead of guesswork.',
+    'The frontend knowledge is there so a handoff never becomes a bottleneck. I ' +
+      'would rather understand the whole path than defend a boundary.',
   ],
 
   // Shown as a fallback under the contact form, and where replies should go.
