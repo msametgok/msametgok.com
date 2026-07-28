@@ -17,13 +17,25 @@ export const site = {
     'keep them fast under real traffic, and own the deploys that carry them. ' +
     'Comfortable enough on the frontend to ship a feature end to end.',
 
-  // TODO: rewrite in your own voice. Two or three sentences, specific over clever.
+  /*
+   * TODO: rewrite the first paragraph in your own voice. Two or three sentences,
+   * specific over clever.
+   *
+   * The second names technologies deliberately sparingly. The four layers in
+   * `layers` below are already the skills list, reached through the trace, and
+   * a section that restates them is the duplication that got the old skills
+   * grid deleted. This paragraph is here to say what the stack was used to
+   * build, which the layer list cannot.
+   */
   about: [
     'I work closest to the parts of a product people never see: request paths, ' +
       'schema design, queues, and the failure modes that only show up at 3am. ' +
       'The frontend knowledge is there so a handoff never becomes a bottleneck.',
-    'TODO: add a second paragraph — how you got here, what you are learning, ' +
-      'or the kind of problem you want next.',
+    'Day to day that means Node and Express over MongoDB, with Redis holding the ' +
+      'state that has to be fast or shared across processes. I have built realtime ' +
+      'messaging where presence, typing, and read receipts stay correct across ' +
+      'reconnects and multiple tabs, with message bodies encrypted at rest. I test ' +
+      'what I ship — Jest on the server, Vitest and Testing Library on the client.',
   ],
 
   // Shown as a fallback under the contact form, and where replies should go.
