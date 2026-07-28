@@ -1,0 +1,64 @@
+/*
+ * Design tokens for msametgok.com
+ *
+ * Direction: instrument panel. The page borrows from observability tooling —
+ * trace waterfalls, span colors, latency readouts — because that is the native
+ * visual world of backend work, and because it makes invisible work legible.
+ *
+ * Color is semantic, not decorative: every hue below maps to a layer of a
+ * system, and it means the same thing everywhere it appears on the page.
+ */
+
+:root {
+  /* Ground */
+  --paper: #eef1f4; /* cool instrument grey — the page */
+  --surface: #ffffff; /* raised panels */
+  --surface-sunk: #e4e9ee; /* wells, trace background */
+  --rule: #ced7e0; /* hairlines */
+  --rule-strong: #aab8c6;
+
+  /* Ink */
+  /* All three clear WCAG AA on --paper and --surface. The faint tier is the
+     floor — do not lighten it further to "quiet things down". */
+  --ink: #101826; /* body and display text */
+  --ink-muted: #48596e; /* secondary text, labels */
+  --ink-faint: #5a6b80; /* metadata, table keys */
+
+  /* Span hues — each is one layer of a system */
+  --edge: #2f5fe0; /* network boundary, HTTP in/out */
+  --service: #0f9b8e; /* application services */
+  --data: #7c4ddb; /* datastores, caches */
+  --async: #d0691f; /* queues, workers, background jobs */
+
+  /* Form feedback — deliberately not span hues. These say "your input was
+     accepted or rejected", never "this layer of a system". Keeping the two
+     scales apart is what lets span color stay unambiguous. */
+  --ok: #0f7a63;
+  --alert: #b3372c;
+
+  /* Type */
+  --display: 'Archivo', system-ui, sans-serif;
+  --body: 'IBM Plex Sans', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.125rem;
+  --step-2: 1.5rem;
+  --step-3: 2.25rem;
+  --step-4: clamp(2.5rem, 7vw, 4.75rem);
+
+  --tracking-tight: -0.03em;
+  --tracking-mono: 0.02em;
+  --tracking-label: 0.14em;
+
+  /* Space */
+  --shell: 1120px;
+  --header-h: 3.5rem;
+  --gutter: clamp(1.25rem, 5vw, 3rem);
+  --section-y: clamp(4.5rem, 11vw, 8.5rem);
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --fast: 140ms;
+}
