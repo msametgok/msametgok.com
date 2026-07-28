@@ -1,0 +1,247 @@
+/*
+ * The form is built as a panel, matching the trace in the hero: same surface,
+ * same hairline, same head with a label on the left and a live readout on the
+ * right. Its rows behave like span rows — the whole row responds, not a box
+ * floating inside it.
+ */
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem clamp(1rem, 3vw, 1.35rem);
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: var(--step--1);
+}
+
+.endpoint {
+  font-weight: 600;
+  letter-spacing: var(--tracking-mono);
+}
+
+.readout {
+  color: var(--ink-muted);
+  letter-spacing: var(--tracking-mono);
+}
+
+.readout[data-state='error'] {
+  color: var(--alert);
+}
+
+.readout[data-state='sent'] {
+  color: var(--ok);
+}
+
+/* Rows */
+
+.rows {
+  display: grid;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 0.75rem 1rem;
+  padding: 0.85rem clamp(1rem, 3vw, 1.35rem);
+  border-bottom: 1px solid var(--rule);
+  transition: background var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
+}
+
+.rowTall {
+  align-items: start;
+}
+
+/*
+ * Focus lights the whole row and adds a bar in the accent colour. This is the
+ * focus indicator — strong enough to stand alone, which is why the control
+ * inside drops its own outline.
+ */
+.row:focus-within {
+  background: color-mix(in srgb, var(--edge) 7%, transparent);
+  box-shadow: inset 3px 0 0 var(--edge);
+}
+
+.row[data-invalid] {
+  background: color-mix(in srgb, var(--alert) 6%, transparent);
+  box-shadow: inset 3px 0 0 var(--alert);
+}
+
+.label {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  padding-top: 0.3rem;
+}
+
+.control {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.input,
+.textarea {
+  font: inherit;
+  font-size: var(--step-0);
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  width: 100%;
+  outline: none;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 6.5rem;
+  line-height: 1.55;
+  resize: none;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--ink-faint);
+}
+
+.error {
+  font-size: var(--step--1);
+  color: var(--alert);
+}
+
+/* Honeypot: off-screen rather than display:none, which some bots skip. */
+.trap {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Foot */
+
+.foot {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.25rem;
+  padding: clamp(1rem, 3vw, 1.35rem);
+}
+
+.submit {
+  font-family: var(--mono);
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  padding: 0.8rem 1.6rem;
+  cursor: pointer;
+  transition: background var(--fast) var(--ease), border-color var(--fast) var(--ease);
+}
+
+.submit:hover:not(:disabled) {
+  background: var(--edge);
+  border-color: var(--edge);
+}
+
+.submit:disabled {
+  cursor: progress;
+  background: var(--ink-muted);
+  border-color: var(--ink-muted);
+}
+
+.fallback {
+  font-family: var(--mono);
+  font-size: var(--step--1);
+  color: var(--ink-muted);
+}
+
+.formError {
+  padding: 0 clamp(1rem, 3vw, 1.35rem) clamp(1rem, 3vw, 1.35rem);
+  font-size: var(--step--1);
+  color: var(--alert);
+}
+
+.formError:empty {
+  display: none;
+}
+
+/* Sent */
+
+.sent {
+  display: grid;
+  gap: 0.6rem;
+  justify-items: start;
+  padding: clamp(1.35rem, 4vw, 2rem);
+}
+
+.sentTitle {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ok);
+}
+
+.sent p {
+  color: var(--ink-muted);
+  max-width: 44ch;
+}
+
+.again {
+  margin-top: 0.5rem;
+  font-family: var(--mono);
+  font-size: var(--step--1);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.22em;
+  text-decoration-color: var(--rule-strong);
+}
+
+.again:hover {
+  text-decoration-color: currentColor;
+}
+
+@media (max-width: 34rem) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.4rem;
+  }
+
+  .label {
+    padding-top: 0;
+  }
+
+  .submit {
+    width: 100%;
+  }
+}
+
+/* Windows high-contrast mode ignores background tints, so restore an outline. */
+@media (forced-colors: active) {
+  .row:focus-within {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}
