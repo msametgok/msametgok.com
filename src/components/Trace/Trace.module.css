@@ -1,0 +1,243 @@
+.trace {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: clamp(1rem, 3vw, 1.75rem);
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: var(--step--1);
+}
+
+.operation {
+  font-weight: 600;
+  letter-spacing: var(--tracking-mono);
+}
+
+.total {
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 12.5rem;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  margin-top: 0.85rem;
+}
+
+/* Waterfall */
+
+.spans {
+  display: grid;
+  align-content: start;
+}
+
+.span {
+  display: grid;
+  grid-template-columns: minmax(0, 14.5rem) minmax(0, 1fr) 4rem;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.35rem 0.4rem;
+  margin-inline: -0.4rem;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--fast) var(--ease);
+  animation: row-in 420ms var(--ease) backwards;
+  animation-delay: calc(var(--i) * 85ms);
+}
+
+.span:hover {
+  background: var(--surface-sunk);
+}
+
+.span[data-selected] {
+  background: color-mix(in srgb, var(--hue) 12%, transparent);
+}
+
+.label {
+  font-family: var(--mono);
+  font-size: var(--step--1);
+  letter-spacing: var(--tracking-mono);
+  color: var(--ink);
+  padding-left: calc(var(--depth) * 0.9rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.span[data-selected] .label {
+  font-weight: 600;
+}
+
+.track {
+  position: relative;
+  display: block;
+  height: 0.75rem;
+  background: var(--surface-sunk);
+}
+
+.bar {
+  position: absolute;
+  inset-block: 0;
+  left: var(--start);
+  width: var(--width);
+  min-width: 2px;
+  background: var(--hue);
+  transform-origin: left center;
+  animation: bar-in 520ms var(--ease) backwards;
+  animation-delay: calc(var(--i) * 85ms + 60ms);
+}
+
+.duration {
+  font-family: var(--mono);
+  font-size: var(--step--1);
+  color: var(--ink-muted);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Span detail */
+
+.detail {
+  border-top: 3px solid var(--hue);
+  padding-top: 0.9rem;
+  animation: detail-in 220ms var(--ease);
+}
+
+.detail:focus {
+  outline: none;
+}
+
+.layer {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.does {
+  margin-top: 0.6rem;
+  font-size: var(--step--1);
+  color: var(--ink-muted);
+}
+
+.items {
+  list-style: none;
+  padding: 0;
+  margin-top: 0.9rem;
+  display: grid;
+  gap: 0.35rem;
+  font-size: var(--step-0);
+}
+
+/* Caption */
+
+.caption {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 1.5rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--rule);
+}
+
+.caption p {
+  max-width: 46ch;
+  font-size: var(--step--1);
+  color: var(--ink-muted);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.1rem;
+  list-style: none;
+  padding: 0;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.legend li::before {
+  content: '';
+  width: 0.6rem;
+  height: 0.6rem;
+  background: var(--hue);
+}
+
+@keyframes row-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@keyframes bar-in {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes detail-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 60rem) {
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.75rem;
+  }
+}
+
+@media (max-width: 40rem) {
+  .span {
+    grid-template-columns: minmax(0, 1fr) 3.75rem;
+    grid-template-areas:
+      'label duration'
+      'track track';
+    gap: 0.3rem 0.75rem;
+  }
+
+  .label {
+    grid-area: label;
+  }
+
+  .duration {
+    grid-area: duration;
+  }
+
+  .track {
+    grid-area: track;
+    height: 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .span,
+  .bar,
+  .detail {
+    animation: none;
+  }
+}
