@@ -69,7 +69,7 @@ export const projects = [
      */
     links: [
       { label: 'Source', href: 'https://github.com/msametgok/real-time-chat' },
-      { label: 'Live demo', href: '' },
+      { label: 'Live demo', href: 'https://real-time-chat-gamma-eight.vercel.app/' },
     ],
   },
 ]
