@@ -25,6 +25,13 @@ function validate({ name, email, message }) {
 
 const EMPTY = { name: '', email: '', message: '', website: '' }
 
+/*
+ * Shown when nothing answered for the API — a dead port, a dropped connection,
+ * a proxy or gateway erroring on its own. Distinct from the server's own
+ * delivery failure, which arrives as {errors} and speaks for itself.
+ */
+const UNREACHABLE = 'Could not reach the server. Check your connection and try again.'
+
 /* Focus order when a submit fails, matching the visual order of the fields. */
 const ORDER = ['name', 'email', 'message']
 
@@ -81,8 +88,15 @@ export default function ContactForm() {
       })
 
       if (!response.ok) {
-        const body = await response.json().catch(() => ({}))
-        setErrors(body.errors ?? { form: 'The message could not be delivered just now.' })
+        /*
+         * The API refuses in exactly one shape: {errors}. A body that will not
+         * parse never came from it — in development that is the Vite proxy
+         * answering an empty 500 because the API is not running yet. Blaming
+         * delivery there sends you looking at the mailer for a dead port.
+         */
+        const body = await response.json().catch(() => null)
+
+        setErrors(body?.errors ?? { form: UNREACHABLE })
         setState('idle')
         return
       }
@@ -91,7 +105,7 @@ export default function ContactForm() {
       setErrors({})
       setState('sent')
     } catch {
-      setErrors({ form: 'Could not reach the server. Check your connection and try again.' })
+      setErrors({ form: UNREACHABLE })
       setState('idle')
     }
   }
