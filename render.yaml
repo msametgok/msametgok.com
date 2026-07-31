@@ -30,15 +30,14 @@ services:
 
       # Secrets are never committed. sync: false tells Render to prompt for
       # these once in the dashboard and keep them out of this file.
+      #
+      # Mail leaves over Resend's HTTPS API because Render blackholes outbound
+      # SMTP — the old SMTP_HOST/PORT/USER vars are unused and can be deleted
+      # from the dashboard. SMTP_PASS and SMTP_FROM still work as fallbacks, so
+      # a deploy cannot break in the window before they are renamed.
       - key: CONTACT_TO
         sync: false
-      - key: SMTP_HOST
+      - key: RESEND_API_KEY
         sync: false
-      - key: SMTP_PORT
-        sync: false
-      - key: SMTP_USER
-        sync: false
-      - key: SMTP_PASS
-        sync: false
-      - key: SMTP_FROM
+      - key: MAIL_FROM
         sync: false

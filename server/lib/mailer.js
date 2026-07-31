@@ -1,29 +1,40 @@
-import nodemailer from 'nodemailer'
-
 /*
- * Delivery for contact messages.
+ * Delivery for contact messages, over Resend's HTTPS API.
  *
- * Without SMTP credentials the server logs submissions instead of sending them,
- * so the form works end to end in development and nothing fails silently. Set
- * the SMTP_* vars (see .env.example) to start delivering for real.
+ * This spoke SMTP until it met production. Render blackholes outbound SMTP, so
+ * a send from a deployed instance hung until the visitor gave up, while the
+ * same code and credential delivered in half a second from a laptop. Port 443
+ * is the one port a host cannot block without breaking itself.
+ *
+ * Without credentials the server logs submissions instead of sending them, so
+ * the form works end to end in development and nothing fails silently.
  */
 
-const port = Number(process.env.SMTP_PORT ?? 587)
+const ENDPOINT = 'https://api.resend.com/emails'
+
+/*
+ * A send must never outlast a visitor's patience. SMTP had no bound, which is
+ * exactly how a blocked port turned into a button that span forever; this drops
+ * into the route's 502 branch instead, which points them at the mailto link.
+ */
+const TIMEOUT_MS = 10_000
 
 const config = {
-  host: process.env.SMTP_HOST,
-  user: process.env.SMTP_USER,
-  pass: process.env.SMTP_PASS,
+  /*
+   * Resend's SMTP password was always the API key, so an existing SMTP_PASS
+   * keeps working and no redeploy needs new environment variables. Prefer the
+   * honest name when it is set.
+   */
+  apiKey: process.env.RESEND_API_KEY || process.env.SMTP_PASS,
   to: process.env.CONTACT_TO,
   /*
-   * The address mail is sent as. Separate from SMTP_USER because a transactional
-   * provider's username is not a mailbox — Resend's is the literal string
-   * "resend" — so the two only coincide when authenticating against real inbox.
+   * The address mail is sent as. Must be on a domain verified with Resend —
+   * never the visitor's address, which would be a spoof and would fail SPF.
    */
-  from: process.env.SMTP_FROM || process.env.SMTP_USER,
+  from: process.env.MAIL_FROM || process.env.SMTP_FROM,
 }
 
-export const isConfigured = Boolean(config.host && config.user && config.pass && config.to)
+export const isConfigured = Boolean(config.apiKey && config.to && config.from)
 
 /*
  * A username in the From header is a malformed address, so the provider rejects
@@ -31,36 +42,36 @@ export const isConfigured = Boolean(config.host && config.user && config.pass &&
  */
 export const fromIsMalformed = isConfigured && !config.from.includes('@')
 
-let transport
-
-function getTransport() {
-  transport ??= nodemailer.createTransport({
-    host: config.host,
-    port,
-    secure: port === 465,
-    auth: { user: config.user, pass: config.pass },
-  })
-
-  return transport
-}
-
 export async function sendContactMessage({ name, email, message }) {
   if (!isConfigured) {
-    console.warn('[contact] SMTP is not configured — logging this message instead of sending it.')
+    console.warn('[contact] Mail is not configured — logging this message instead of sending it.')
     console.info({ name, email, message })
     return
   }
 
-  await getTransport().sendMail({
-    /*
-     * From is always the authenticated mailbox — putting the visitor's address
-     * here would be a spoof and would fail SPF. Their address goes in replyTo,
-     * so hitting reply in the inbox does the right thing.
-     */
-    from: { name: 'Portfolio contact form', address: config.from },
-    to: config.to,
-    replyTo: { name, address: email },
-    subject: `Message from ${name}`,
-    text: `${message}\n\n---\nFrom: ${name} <${email}>\nSent from the contact form on your site.`,
+  const response = await fetch(ENDPOINT, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${config.apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    signal: AbortSignal.timeout(TIMEOUT_MS),
+    body: JSON.stringify({
+      /*
+       * from is the verified sender; the visitor goes in reply_to, so hitting
+       * reply in the inbox reaches them. validateContact has already stripped
+       * CR/LF from name, so neither field can smuggle a header.
+       */
+      from: `Portfolio contact form <${config.from}>`,
+      to: [config.to],
+      reply_to: `${name} <${email}>`,
+      subject: `Message from ${name}`,
+      text: `${message}\n\n---\nFrom: ${name} <${email}>\nSent from the contact form on your site.`,
+    }),
   })
+
+  if (!response.ok) {
+    const detail = await response.text().catch(() => '')
+    throw new Error(`Resend answered ${response.status}. ${detail.slice(0, 200)}`)
+  }
 }

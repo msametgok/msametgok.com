@@ -198,16 +198,24 @@ or `400 {errors:{field:message}}`. Four things are load-bearing:
   rule in `server/lib/validate.js` first, then mirror it.
 - **`website` is a honeypot.** People never see it. When it is filled the server answers
   exactly as if the send succeeded — explaining the rejection only teaches the bot.
-- **`from` is always the authenticated mailbox**, never the visitor's address. Putting
-  their address in `from` is a spoof and fails SPF. It goes in `replyTo`, so replying
+- **`from` is always the verified sender**, never the visitor's address. Putting
+  their address in `from` is a spoof and fails SPF. It goes in `reply_to`, so replying
   from the inbox reaches them.
 - **Names are stripped of CR/LF** before reaching a mail header, or a name becomes a
   header injection.
 
-Without SMTP env vars the server logs messages instead of sending them, and says so at
+Without mail env vars the server logs messages instead of sending them, and says so at
 startup. That keeps development working without credentials and makes an unconfigured
 production deploy obvious rather than silent. Copy `.env.example` to `.env` to configure;
 `.env` is gitignored and must stay that way.
+
+**Mail leaves over Resend's HTTPS API, not SMTP.** This is not a preference. The form
+spoke SMTP first and worked locally in half a second, then hung forever from Render,
+which blackholes outbound SMTP the way many hosts do — a green health check and a button
+that spins until the visitor leaves. Port 443 is the one port a host cannot block. Any
+future transport must be reachable from inside a PaaS, and any send must be bounded by a
+timeout so a stalled network call fails into the 502 branch instead of hanging the
+request. Sending needs no dependency: `fetch` is global in Node.
 
 Use a transactional provider (Resend, Brevo, Mailgun, Postmark) as the sender rather than
 a personal Hotmail account — Microsoft has been turning off SMTP password auth for
