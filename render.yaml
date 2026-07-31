@@ -1,0 +1,44 @@
+# Render Blueprint — one Node web service, matching the deployment target in
+# CLAUDE.md: `npm start` serves the built dist/ and the API on a single port,
+# so there is no CORS and no second host to manage.
+#
+# Render assigns PORT at runtime; server/index.js already reads it.
+
+services:
+  - type: web
+    name: msametgok-com
+    runtime: node
+    plan: free
+    region: virginia
+    branch: main
+
+    # --include=dev is load-bearing. Vite is a devDependency, so if NODE_ENV
+    # is ever production at build time a plain `npm ci` would omit it and the
+    # build would fail on a missing vite binary.
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+
+    # Liveness only. This answers 200 even with no SMTP vars set — the body
+    # then reads {"mail":"logging only"}, meaning the site is up but contact
+    # messages are going to the log. A green deploy is not proof the form
+    # delivers; read the body for that.
+    healthCheckPath: /api/health
+
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+
+      # Secrets are never committed. sync: false tells Render to prompt for
+      # these once in the dashboard and keep them out of this file.
+      - key: CONTACT_TO
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM
+        sync: false
